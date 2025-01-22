@@ -22,7 +22,15 @@ if (item){
    def postcode = (item?.AdrPostcodeTxt) ? item?.AdrPostcodeTxt : '';
    def city = (item?.AdrCityTxt) ? item?.AdrCityTxt : '';
    outputArray << postcode + ' ' + city;
-   outputArray << item?.AdrCountryVoc
+   def country = item?.AdrCountryVoc
+   if (item?.AdrCountryVoc?.size() > 1) {
+       item?.AdrCountryVoc?.each{
+         if( it?.LanguageVoc?.logicalName == 'en'){
+               country = it?.NameTxt
+         }
+      }
+   }
+   outputArray << country
 }
 
 output = outputArray?.join('\n')
