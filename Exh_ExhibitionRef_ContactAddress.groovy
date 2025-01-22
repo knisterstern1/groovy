@@ -15,22 +15,19 @@ if (item){
    def acTitle = (item?.AdrAcademicTitleVoc?.logicalName) ? item?.AdrAcademicTitleVoc?.logicalName + ' ': '';
    def forename = item?.AdrForeNameTxt;
    def surename = item?.AdrSurNameTxt;
-   outputArray <<  gender + acTitle + forename + ' ' + surename;
-   outputArray << item?.AdrFunctionVoc?.join(' ')
+   outputArray <<  gender + acTitle + forename + ' ' + surename
+   if (item?.AdrFunctionVoc?.size() > 0) {
+     outputArray << item?.AdrFunctionVoc?.join(' ') 
+   }
    outputArray << item?.AdrOrganisationTxt;
    outputArray << item?.AdrStreetTxt;
-   def postcode = (item?.AdrPostcodeTxt) ? item?.AdrPostcodeTxt : '';
+   def postcode = (item?.AdrPostcodeTxt) ? item?.AdrPostcodeTxt + ' ' : '';
    def city = (item?.AdrCityTxt) ? item?.AdrCityTxt : '';
-   outputArray << postcode + ' ' + city;
-   def country = item?.AdrCountryVoc
-   if (item?.AdrCountryVoc?.size() > 1) {
-       item?.AdrCountryVoc?.each{
-         if( it?.LanguageVoc?.logicalName == 'en'){
-               country = it?.NameTxt
-         }
-      }
-   }
-   outputArray << country
-}
+   outputArray << postcode + city;
+   def country =  (item?.AdrCountryVoc?.getLabel('en')) ? item?.AdrCountryVoc?.getLabel('en') : item?.AdrCountryVoc?.getLabel()
 
+
+   outputArray << country 
+
+}
 output = outputArray?.join('\n')
