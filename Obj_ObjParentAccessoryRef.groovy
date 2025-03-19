@@ -15,20 +15,20 @@ def getMeasure(Object measure) {
     return [label, measures].join(": ") 
 }
 def getRootAccessory(Object obj) {
-
+    return (obj?.AccParentAccessoryRef) ? obj?.AccParentAccessoryRef : obj
 }
 
 def outputArray = []
-def accessories = record?.ObjParentAccessoryRef
-
-accessories.each{
+def accessory = record?.ObjParentAccessoryRef
+if (accessory) {
+  def root = getRootAccessory(accessory)   
   def item = []
-  if (it?.AccDenominationVoc) {
-    item << it?.AccDenominationVoc 
+  if (root?.AccDenominationVoc) {
+    item << root?.AccDenominationVoc 
   }
-  item << it?.AccNumberTxt
-  if (it?.AccDimAllGrp.size() > 0){
-    item << getMeasure(it?.AccDimAllGrp.findAll().first()) 
+  item << root?.AccNumberTxt
+  if (root?.AccDimAllGrp.size() > 0){
+    item << getMeasure(root?.AccDimAllGrp.findAll().first()) 
   }
  outputArray << item.join(", ")
 }
