@@ -1,4 +1,5 @@
 def outputArray = []
+
 def refs = record?.ExhParticipantRef
 def item = null;
 if (refs.size() == 1){
